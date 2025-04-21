@@ -19,5 +19,12 @@ return {
     vim.keymap.set('n', '<leader>gp', function()
       tinygit.push()
     end, { desc = 'git push' })
+    vim.keymap.set('n', '<leader>gs', function()
+      tinygit.status()
+    end, { desc = 'git status' })
+
+    vim.keymap.set('n', '<leader>gl', function()
+      tinygit.log()
+    end, { desc = 'git log' })
   end,
 }
