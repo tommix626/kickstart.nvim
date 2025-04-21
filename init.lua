@@ -200,6 +200,10 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+vim.keymap.set('n', '<leader>tn', ':tabnew<CR>', { desc = 'New Tab' })
+vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close Tab' })
+vim.keymap.set('n', '<leader>tl', 'gt', { desc = 'Next Tab' })
+vim.keymap.set('n', '<leader>th', 'gT', { desc = 'Prev Tab' })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -949,6 +953,16 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fM', function()
         require('mini.files').open(vim.uv.cwd(), true)
       end, { desc = 'Open mini.files (cwd)' })
+
+      -- mini git
+      require('mini.git').setup()
+      vim.keymap.set('n', '<leader>gs', function()
+        vim.cmd 'Git status'
+      end, { desc = 'Git status' })
+
+      vim.keymap.set('n', '<leader>gl', function()
+        vim.cmd 'Git log'
+      end, { desc = 'Git log' })
     end,
   },
   { -- Highlight, edit, and navigate code
