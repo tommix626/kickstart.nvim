@@ -204,6 +204,20 @@ vim.keymap.set('n', '<leader>tn', ':tabnew<CR>', { desc = 'New Tab' })
 vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { desc = 'Close Tab' })
 vim.keymap.set('n', '<leader>tl', 'gt', { desc = 'Next Tab' })
 vim.keymap.set('n', '<leader>th', 'gT', { desc = 'Prev Tab' })
+
+-- run python
+vim.keymap.set('n', '<Leader>rp', function()
+  local file = vim.fn.expand '%'
+  local cwd = vim.fn.getcwd()
+  vim.cmd 'sp' -- open split
+  vim.cmd('term PYTHONPATH=' .. cwd .. ' python ' .. file)
+end, { desc = 'Run Python file with PYTHONPATH in terminal' })
+vim.keymap.set('n', '<C-W>', '<CMD>bd!<CR>', { desc = 'Force close buffer' })
+
+-- vim.keymap.set('n', '<C-_>', function()
+--   require('Comment.api').toggle.linewise.current()
+-- end, { noremap = true, silent = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -217,6 +231,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- Auto-save on buffer leave, window leave, or LSP jumps
+vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'WinLeave' }, {
+  callback = function()
+    -- Only save if the buffer is modified
+    if vim.bo.modified and vim.bo.filetype ~= '' and vim.bo.buftype == '' then
+      vim.cmd 'silent! update' -- `update` only saves if needed, silent avoids error messages
+    end
+  end,
+})
+
+-- set lsp log level to debug
+-- vim.lsp.set_log_level 'debug'
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -831,7 +858,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1012,7 +1039,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
